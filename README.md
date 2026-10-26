@@ -7,6 +7,8 @@ while the drawing stays visible.
 Xink does **not** record video. Keep using OBS, Camtasia, Loom or the Snipping
 Tool to record. 🇧🇷 [Português](#português) · 🇪🇸 [Español](#español)
 
+Made by **[Skale Club](https://skale.club)**.
+
 ## Download
 
 Get the latest `Xink.exe` from **[Releases](https://github.com/skaleclub/xink/releases/latest)**. It keeps itself up to date: when a new version is out, the app offers it (in the tray menu) and swaps itself in place, keeping your settings. Every update is signed and checked before it is used.
@@ -177,3 +179,7 @@ para grabar videos. No graba: sigue usando OBS o tu grabador de siempre.
   deshacer/rehacer.
 - En OBS usa **Captura de pantalla**, no Captura de ventana. La barra no sale
   en la grabación, solo los trazos.
+
+---
+
+© 2026 [Skale Club](https://skale.club)

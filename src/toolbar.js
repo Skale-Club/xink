@@ -170,7 +170,12 @@ function flyoutItems(name) {
   flip.title = t(next);
   const quit = button('close', null, () => invoke('quit'));
   quit.title = t('quit');
-  return [flip, quit];
+  const skale = document.createElement('button');
+  skale.className = 'btn skale';
+  skale.innerHTML = '<img src="skaleclub.png" alt="">';
+  skale.title = t('madeBy');
+  skale.addEventListener('click', pick(() => invoke('open_site')));
+  return [flip, skale, quit];
 }
 
 function toggleFlyout(name, anchor) {

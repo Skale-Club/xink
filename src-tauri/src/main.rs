@@ -79,7 +79,7 @@ fn labels(language: &str) -> Labels {
             language: "Idioma",
             settings: "Configurações (xink.json)",
             quit: "Sair do Xink",
-            tooltip: "Xink: clique para mostrar ou esconder a barra",
+            tooltip: "Xink, da Skale Club: clique para mostrar ou esconder a barra",
             update: "Atualizar para a versão",
         },
         "es" => Labels {
@@ -89,7 +89,7 @@ fn labels(language: &str) -> Labels {
             language: "Idioma",
             settings: "Configuración (xink.json)",
             quit: "Salir de Xink",
-            tooltip: "Xink: haz clic para mostrar u ocultar la barra",
+            tooltip: "Xink, de Skale Club: haz clic para mostrar u ocultar la barra",
             update: "Actualizar a la versión",
         },
         _ => Labels {
@@ -99,7 +99,7 @@ fn labels(language: &str) -> Labels {
             language: "Language",
             settings: "Settings (xink.json)",
             quit: "Quit Xink",
-            tooltip: "Xink: click to show or hide the toolbar",
+            tooltip: "Xink by Skale Club: click to show or hide the toolbar",
             update: "Update to version",
         },
     }
@@ -344,6 +344,11 @@ fn open_config() {
     let _ = Command::new("notepad.exe").arg(config_path()).spawn();
 }
 
+/// Opens the Skale Club website in the default browser.
+#[tauri::command]
+fn open_site() {
+    let _ = Command::new("explorer.exe").arg("https://skale.club").spawn();
+}
 #[tauri::command]
 fn quit(app: AppHandle) {
     app.exit(0);
@@ -425,6 +430,7 @@ fn build_menu(app: &AppHandle, config: &Config) -> tauri::Result<Menu<tauri::Wry
     let toolbar = item("toolbar", format!("{}\t{}", t.toolbar, config.toolbar_hotkey))?;
     let clear = item("clear", format!("{}\t{}", t.clear, config.clear_hotkey))?;
     let settings = item("settings", t.settings.into())?;
+    let site = item("site", "Skale Club · skale.club".into())?;
     let quit = item("quit", t.quit.into())?;
     let separator = PredefinedMenuItem::separator(app)?;
 
@@ -463,6 +469,7 @@ fn build_menu(app: &AppHandle, config: &Config) -> tauri::Result<Menu<tauri::Wry
         &separator,
         &language,
         &settings,
+        &site,
         &quit,
     ]);
     Menu::with_items(app, &items)
@@ -480,6 +487,7 @@ fn create_tray(app: &AppHandle, config: &Config) -> tauri::Result<()> {
                 let _ = app.emit("clear", ());
             }
             "settings" => open_config(),
+            "site" => open_site(),
             "update" => install_update(app),
             "quit" => app.exit(0),
             id => {
@@ -532,6 +540,7 @@ fn main() {
             set_toolbar_size,
             set_toolbar_orientation,
             open_config,
+            open_site,
             quit
         ])
         .on_window_event(|window, event| {

@@ -161,3 +161,14 @@ body.vertical .sep { width: 22px; height: 1px; margin: 5px 0; }
 body.vertical #mode { width: 34px; }
 body.vertical #mode span { display: none; }
 body.vertical .swatch { margin: 2px 0; }
+
+.btn.skale img { width: 22px; height: 22px; pointer-events: none; }
+
+/* Design review: key letters only while the pointer is on the bar (always
+   in an open flyout), a ring around the width dot so it reads as a control,
+   and a larger Skale Club mark. */
+.key { opacity: 0; transition: opacity 0.15s; }
+#pill:hover .key, #flyout .key { opacity: 1; }
+#width { width: 30px; height: 30px; margin: 0 2px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(143, 169, 238, 0.3); }
+.btn.skale { width: 42px; }
+.btn.skale img { width: 30px; height: 30px; }

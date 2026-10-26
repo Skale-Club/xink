@@ -33,6 +33,7 @@ const I18N = {
     menu: 'More',
     vertical: 'Vertical toolbar',
     horizontal: 'Horizontal toolbar',
+    madeBy: 'Made by Skale Club',
   },
   pt: {
     drawing: 'Desenhando',
@@ -64,6 +65,7 @@ const I18N = {
     menu: 'Mais',
     vertical: 'Barra na vertical',
     horizontal: 'Barra na horizontal',
+    madeBy: 'Feito pela Skale Club',
   },
   es: {
     drawing: 'Dibujando',
@@ -95,6 +97,7 @@ const I18N = {
     menu: 'Más',
     vertical: 'Barra vertical',
     horizontal: 'Barra horizontal',
+    madeBy: 'Hecho por Skale Club',
   },
 };
 
