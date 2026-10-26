@@ -1,0 +1,163 @@
+/* Skale Club palette: navy surfaces, CTA blue #5173D6, soft blue #8FA9EE. */
+:root {
+  --bg: rgba(12, 20, 36, 0.96);
+  --raised: #142038;
+  --fg: #e9eef9;
+  --muted: #7d89a4;
+  --hover: rgba(143, 169, 238, 0.13);
+  --line: rgba(143, 169, 238, 0.18);
+  --brand: #5173D6;
+  --brand-soft: #8FA9EE;
+  --tool-on: rgba(81, 115, 214, 0.32);
+}
+
+html, body {
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+  user-select: none;
+}
+
+#pill, #flyout {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+#pill { top: 8px; left: 8px; padding: 5px 6px 5px 2px; }
+#flyout { display: none; padding: 4px; border-radius: 12px; }
+
+.group { display: flex; align-items: center; gap: 2px; }
+
+.grip {
+  width: 10px;
+  height: 22px;
+  padding: 6px 3px;
+  cursor: grab;
+  background: radial-gradient(circle, var(--muted) 1.2px, transparent 1.5px) 0 0 / 5px 5px;
+  background-origin: content-box;
+  background-clip: content-box;
+}
+
+.btn {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--fg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.btn:hover { background: var(--hover); }
+.btn.on { background: var(--tool-on); color: #fff; box-shadow: inset 0 0 0 1px var(--brand); }
+.btn:disabled { opacity: 0.3; cursor: default; background: transparent; }
+.btn svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* Keyboard shortcut, bottom-right of a tool button. */
+.key {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  font: 600 8px/1 "Segoe UI", sans-serif;
+  color: var(--muted);
+  pointer-events: none;
+}
+.btn.on .key { color: var(--brand-soft); }
+
+/* Small corner triangle: this button opens more options. */
+.btn.more::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  bottom: 3px;
+  border: 2.5px solid transparent;
+  border-left-color: var(--muted);
+  border-bottom-color: var(--muted);
+  pointer-events: none;
+}
+
+#mode {
+  width: 104px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  background: var(--raised);
+}
+#mode:hover { background: #1a2945; }
+#mode.on { background: var(--brand); color: #fff; box-shadow: none; }
+
+.sep { width: 1px; height: 22px; background: var(--line); margin: 0 5px; }
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  margin: 0 2px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+}
+.swatch.on { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--brand-soft); }
+
+#width i {
+  display: block;
+  border-radius: 50%;
+  background: var(--fg);
+  pointer-events: none;
+}
+
+.board-white svg { fill: #fff; }
+.board-black svg { fill: #000; stroke: #8b96b0; }
+
+#bubble {
+  display: none;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 44px;
+  height: 44px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  background: var(--bg) url("bubble.png") center / 28px no-repeat;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+#bubble.on { border-color: var(--brand); }
+
+body.mini #pill, body.mini #flyout { display: none !important; }
+body.mini #bubble { display: block; }
+
+/* ---------- vertical toolbar ---------- */
+
+body.vertical #pill,
+body.vertical #flyout,
+body.vertical .group { flex-direction: column; }
+body.vertical #pill { padding: 2px 5px 6px; }
+body.vertical .grip { width: 22px; height: 8px; padding: 3px 6px; }
+body.vertical .sep { width: 22px; height: 1px; margin: 5px 0; }
+body.vertical #mode { width: 34px; }
+body.vertical #mode span { display: none; }
+body.vertical .swatch { margin: 2px 0; }

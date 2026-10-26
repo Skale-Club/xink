@@ -1,0 +1,40 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+}
+
+/* Barely-there tint so every pixel takes the mouse while drawing. */
+body.drawing { background: rgba(0, 0, 0, 0.004); }
+
+canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+body.drawing canvas { cursor: crosshair; }
+body.drawing.tool-text canvas { cursor: text; }
+body.drawing.tool-eraser canvas,
+body.drawing.tool-laser canvas,
+body.drawing.tool-spot canvas { cursor: none; }
+
+#text {
+  position: fixed;
+  display: none;
+  margin: 0;
+  padding: 0;
+  border: 1px dashed rgba(128, 128, 128, 0.8);
+  outline: none;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  white-space: pre;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}

@@ -1,0 +1,111 @@
+'use strict';
+
+// Toolbar texts. English is the default; the tray's Language menu switches.
+// Tool keys (P, M, A...) stay the same in every language.
+const I18N = {
+  en: {
+    drawing: 'Drawing',
+    mouse: 'Mouse',
+    modeTitle: 'Switch between drawing and using the mouse ({key}). Esc also goes back to the mouse.',
+    grip: 'Drag the toolbar',
+    pen: 'Pen (P)',
+    marker: 'Highlighter (M)',
+    arrow: 'Arrow (A) · Shift: snap angle',
+    line: 'Line (L) · Shift: snap angle',
+    rect: 'Rectangle (R) · Shift: square',
+    ellipse: 'Ellipse (O) · Shift: circle',
+    text: 'Text (T) · Enter to confirm',
+    eraser: 'Eraser (E)',
+    laser: 'Laser pointer (X): the stroke fades away',
+    spot: 'Spotlight (F) · mouse wheel: size',
+    color: 'Color {n} (key {n})',
+    width: 'Width {n} (mouse wheel or [ ])',
+    undo: 'Undo (Ctrl+Z)',
+    redo: 'Redo (Ctrl+Y)',
+    clear: 'Clear all (C)',
+    white: 'Whiteboard (W)',
+    black: 'Blackboard (K)',
+    minimize: 'Minimize to a bubble',
+    quit: 'Quit Xink',
+    bubble: 'Click to open the toolbar. Drag to move it.',
+    more: 'click again for more',
+    boards: 'Whiteboard / blackboard',
+    menu: 'More',
+    vertical: 'Vertical toolbar',
+    horizontal: 'Horizontal toolbar',
+  },
+  pt: {
+    drawing: 'Desenhando',
+    mouse: 'Mouse',
+    modeTitle: 'Alternar entre desenhar e usar o mouse ({key}). Esc também volta ao mouse.',
+    grip: 'Arrastar a barra',
+    pen: 'Caneta (P)',
+    marker: 'Marca-texto (M)',
+    arrow: 'Seta (A) · Shift: ângulo reto',
+    line: 'Linha (L) · Shift: ângulo reto',
+    rect: 'Retângulo (R) · Shift: quadrado',
+    ellipse: 'Elipse (O) · Shift: círculo',
+    text: 'Texto (T) · Enter confirma',
+    eraser: 'Borracha (E)',
+    laser: 'Ponteiro laser (X): o risco some sozinho',
+    spot: 'Holofote (F) · roda do mouse: tamanho',
+    color: 'Cor {n} (tecla {n})',
+    width: 'Espessura {n} (roda do mouse ou [ ])',
+    undo: 'Desfazer (Ctrl+Z)',
+    redo: 'Refazer (Ctrl+Y)',
+    clear: 'Limpar tudo (C)',
+    white: 'Quadro branco (W)',
+    black: 'Quadro preto (K)',
+    minimize: 'Minimizar em bolinha',
+    quit: 'Sair do Xink',
+    bubble: 'Clique para abrir a barra. Arraste para mover.',
+    more: 'clique de novo para mais opções',
+    boards: 'Quadro branco / preto',
+    menu: 'Mais',
+    vertical: 'Barra na vertical',
+    horizontal: 'Barra na horizontal',
+  },
+  es: {
+    drawing: 'Dibujando',
+    mouse: 'Ratón',
+    modeTitle: 'Alternar entre dibujar y usar el ratón ({key}). Esc también vuelve al ratón.',
+    grip: 'Arrastrar la barra',
+    pen: 'Lápiz (P)',
+    marker: 'Resaltador (M)',
+    arrow: 'Flecha (A) · Shift: ángulo recto',
+    line: 'Línea (L) · Shift: ángulo recto',
+    rect: 'Rectángulo (R) · Shift: cuadrado',
+    ellipse: 'Elipse (O) · Shift: círculo',
+    text: 'Texto (T) · Enter confirma',
+    eraser: 'Borrador (E)',
+    laser: 'Puntero láser (X): el trazo desaparece solo',
+    spot: 'Foco (F) · rueda del ratón: tamaño',
+    color: 'Color {n} (tecla {n})',
+    width: 'Grosor {n} (rueda del ratón o [ ])',
+    undo: 'Deshacer (Ctrl+Z)',
+    redo: 'Rehacer (Ctrl+Y)',
+    clear: 'Borrar todo (C)',
+    white: 'Pizarra blanca (W)',
+    black: 'Pizarra negra (K)',
+    minimize: 'Minimizar en burbuja',
+    quit: 'Salir de Xink',
+    bubble: 'Haz clic para abrir la barra. Arrástrala para moverla.',
+    more: 'haz clic otra vez para más opciones',
+    boards: 'Pizarra blanca / negra',
+    menu: 'Más',
+    vertical: 'Barra vertical',
+    horizontal: 'Barra horizontal',
+  },
+};
+
+let language = 'en';
+
+function setLanguage(code) {
+  language = I18N[code] ? code : 'en';
+  document.documentElement.lang = language;
+}
+
+function t(key, vars = {}) {
+  const text = I18N[language][key] ?? I18N.en[key] ?? key;
+  return text.replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
+}
