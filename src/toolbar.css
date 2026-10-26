@@ -1,9 +1,10 @@
 /* Skale Club palette: navy surfaces, CTA blue #5173D6, soft blue #8FA9EE. */
 :root {
+  color-scheme: dark;
   --bg: rgba(12, 20, 36, 0.96);
   --raised: #142038;
   --fg: #e9eef9;
-  --muted: #7d89a4;
+  --muted: #8692ab;
   --hover: rgba(143, 169, 238, 0.13);
   --line: rgba(143, 169, 238, 0.18);
   --brand: #5173D6;
@@ -15,7 +16,7 @@ html, body {
   margin: 0;
   background: transparent;
   overflow: hidden;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   user-select: none;
 }
 
