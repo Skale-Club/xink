@@ -11,7 +11,7 @@ Made by **[Skale Club](https://skale.club)**.
 
 ## Download
 
-Get the latest `Xink.exe` from **[Releases](https://github.com/skaleclub/xink/releases/latest)**. It keeps itself up to date: when a new version is out, the app offers it (in the tray menu) and swaps itself in place, keeping your settings. Every update is signed and checked before it is used.
+Get the latest `Xink.exe` from **[Releases](https://github.com/Skale-Club/xink/releases/latest)**. It keeps itself up to date: when a new version is out, the app offers it (in the tray menu) and swaps itself in place, keeping your settings. Every update is signed and checked before it is used.
 
 ## Run it
 
@@ -144,7 +144,7 @@ The private key lives outside the repository, in `%USERPROFILE%\.tauri\skale-x-u
 
 ## Português
 
-**Download:** [Releases](https://github.com/skaleclub/xink/releases/latest). O app avisa quando há versão nova e se atualiza sozinho, mantendo as configurações.
+**Download:** [Releases](https://github.com/Skale-Club/xink/releases/latest). O app avisa quando há versão nova e se atualiza sozinho, mantendo as configurações.
 
 Xink é para escrever na tela por cima de qualquer programa, feito para gravar
 vídeo. Ele não grava: continue usando o OBS ou o gravador que já usa.
@@ -164,7 +164,7 @@ vídeo. Ele não grava: continue usando o OBS ou o gravador que já usa.
 
 ## Español
 
-**Descarga:** [Releases](https://github.com/skaleclub/xink/releases/latest). La app avisa cuando hay una versión nueva y se actualiza sola, conservando la configuración.
+**Descarga:** [Releases](https://github.com/Skale-Club/xink/releases/latest). La app avisa cuando hay una versión nueva y se actualiza sola, conservando la configuración.
 
 Xink sirve para escribir en la pantalla encima de cualquier programa, pensado
 para grabar videos. No graba: sigue usando OBS o tu grabador de siempre.
