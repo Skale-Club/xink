@@ -16,8 +16,9 @@ Get the latest `Xink.exe` from **[Releases](https://github.com/skaleclub/xink/re
 ## Run it
 
 Double-click `Xink.exe`. No installer. It needs WebView2, which comes with
-Windows 11. Settings live in `xink.json` next to the exe, so you can carry the
-folder on a USB stick. Opening it a second time just brings the toolbar back.
+Windows 11. Settings live in `Data\xink.json` next to the exe, so you can carry the
+folder on a USB stick. The folder follows the PortableApps layout: the exe, `App\AppInfo\` (name,
+version, icon) and `Data\` for everything the app saves. Opening it a second time just brings the toolbar back.
 
 Xink lives in the system tray (bottom-right, next to the clock):
 

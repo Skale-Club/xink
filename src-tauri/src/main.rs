@@ -7,6 +7,7 @@
 //   above it) and, by default, hidden from screen capture.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod portable;
 mod updater;
 
 use serde::{Deserialize, Serialize};
@@ -116,10 +117,7 @@ struct AppState {
 }
 
 fn config_path() -> PathBuf {
-    std::env::current_exe()
-        .ok()
-        .and_then(|exe| exe.parent().map(|dir| dir.join("xink.json")))
-        .unwrap_or_else(|| PathBuf::from("xink.json"))
+    portable::data_dir().join("xink.json")
 }
 
 fn save_config(config: &Config) {
@@ -517,6 +515,8 @@ fn main() {
     // Before the single-instance check, so a just-updated copy doesn't see the
     // old one still running and quit.
     updater::finish_previous();
+    portable::migrate(&["xink.json"]);
+    portable::sync_appinfo();
     let config = load_config();
     tauri::Builder::default()
         // Opening Xink again just brings the toolbar back.
