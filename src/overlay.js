@@ -63,15 +63,27 @@ function commit(next) {
   changed();
 }
 
+// Drops the stroke or erase in progress without saving it, so a release
+// after Clear, Undo or Redo can't bring back what it had on screen.
+function cancelGesture() {
+  live = null;
+  erasing = null;
+  activeLaser = null;
+  activeTool = null;
+}
+
 function undo() {
+  cancelGesture();
   if (doc.index > 0) { doc.index--; changed(); }
 }
 
 function redo() {
+  cancelGesture();
   if (doc.index < doc.history.length - 1) { doc.index++; changed(); }
 }
 
 function clearAll() {
+  cancelGesture();
   closeText();
   lasers.length = 0;
   if (items().length) commit([]);
@@ -257,21 +269,35 @@ function strokePressure(g, it) {
   }
 }
 
-function drawArrow(g, it) {
+// Shaft end and head triangle, shared by drawing and the eraser.
+function arrowShape(it) {
   const { x1, y1, x2, y2, width } = it;
   const angle = Math.atan2(y2 - y1, x2 - x1);
   const len = Math.hypot(x2 - x1, y2 - y1);
   const head = Math.min(Math.max(14, width * 4.5), len * 0.6);
+  return {
+    shaftEnd: [x2 - Math.cos(angle) * head * 0.7, y2 - Math.sin(angle) * head * 0.7],
+    tri: [
+      [x2, y2],
+      [x2 - head * Math.cos(angle - 0.42), y2 - head * Math.sin(angle - 0.42)],
+      [x2 - head * Math.cos(angle + 0.42), y2 - head * Math.sin(angle + 0.42)],
+    ],
+    edge: Math.max(1, width / 2),
+  };
+}
+
+function drawArrow(g, it) {
+  const { shaftEnd, tri, edge } = arrowShape(it);
   g.beginPath();
-  g.moveTo(x1, y1);
-  g.lineTo(x2 - Math.cos(angle) * head * 0.7, y2 - Math.sin(angle) * head * 0.7);
+  g.moveTo(it.x1, it.y1);
+  g.lineTo(shaftEnd[0], shaftEnd[1]);
   g.stroke();
   g.beginPath();
-  g.moveTo(x2, y2);
-  g.lineTo(x2 - head * Math.cos(angle - 0.42), y2 - head * Math.sin(angle - 0.42));
-  g.lineTo(x2 - head * Math.cos(angle + 0.42), y2 - head * Math.sin(angle + 0.42));
+  g.moveTo(tri[0][0], tri[0][1]);
+  g.lineTo(tri[1][0], tri[1][1]);
+  g.lineTo(tri[2][0], tri[2][1]);
   g.closePath();
-  g.lineWidth = Math.max(1, width / 2);
+  g.lineWidth = edge;
   g.fill();
   g.stroke();
 }
@@ -375,6 +401,12 @@ function hitPolyline(p, pts, tol) {
   return false;
 }
 
+function inTriangle(p, [a, b, c]) {
+  const side = (u, v) => (v[0] - u[0]) * (p.y - u[1]) - (v[1] - u[1]) * (p.x - u[0]);
+  const s1 = side(a, b), s2 = side(b, c), s3 = side(c, a);
+  return (s1 >= 0 && s2 >= 0 && s3 >= 0) || (s1 <= 0 && s2 <= 0 && s3 <= 0);
+}
+
 function hits(it, p, r) {
   const tol = r + (it.width || 0) / 2;
   switch (it.type) {
@@ -382,8 +414,12 @@ function hits(it, p, r) {
     case 'marker':
       return hitPolyline(p, it.pts, tol);
     case 'line':
-    case 'arrow':
       return distToSegment(p.x, p.y, it.x1, it.y1, it.x2, it.y2) <= tol;
+    case 'arrow': {
+      const { shaftEnd, tri, edge } = arrowShape(it);
+      return distToSegment(p.x, p.y, it.x1, it.y1, shaftEnd[0], shaftEnd[1]) <= tol ||
+        inTriangle(p, tri) || hitPolyline(p, [...tri, tri[0]], r + edge / 2);
+    }
     case 'rect': {
       const b = box(it);
       return hitPolyline(p, [[b.x, b.y], [b.x + b.w, b.y], [b.x + b.w, b.y + b.h], [b.x, b.y + b.h], [b.x, b.y]], tol);
@@ -650,6 +686,7 @@ listen('mode', ({ payload }) => setMode(payload));
 listen('clear', clearAll);
 listen('monitor', ({ payload }) => {
   commitText();
+  if (activeTool) endStroke(); // finish it on the drawing it started on
   doc = getDoc(payload);
   changed();
 });
