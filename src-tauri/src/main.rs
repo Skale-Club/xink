@@ -22,7 +22,7 @@ use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, ShortcutState};
 
 const LANGUAGES: [(&str, &str); 3] = [("en", "English"), ("pt", "Português"), ("es", "Español")];
 
-/// Settings kept in xink.json next to the executable.
+/// Settings kept in Data/xink.json beside the executable.
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(default, rename_all = "camelCase")]
 struct Config {
