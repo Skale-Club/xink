@@ -1,4 +1,5 @@
-/* Skale Club palette: navy surfaces, CTA blue #5173D6, soft blue #8FA9EE. */
+/* Skale Club palette: navy surfaces, CTA blue #5173D6, soft blue #8FA9EE.
+   Same values as skale.css in the windowed Skale Club apps. */
 :root {
   color-scheme: dark;
   --bg: rgba(12, 20, 36, 0.96);
@@ -10,6 +11,8 @@
   --brand: #5173D6;
   --brand-soft: #8FA9EE;
   --tool-on: rgba(81, 115, 214, 0.32);
+  --grad: linear-gradient(135deg, #6a8bf0 0%, #5173d6 48%, #4361c8 100%);
+  --surface: linear-gradient(180deg, rgba(24, 36, 64, 0.97), rgba(10, 16, 30, 0.97));
 }
 
 html, body {
@@ -25,10 +28,10 @@ html, body {
   display: flex;
   align-items: center;
   gap: 2px;
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07) inset, 0 4px 10px -2px rgba(0, 0, 0, 0.55);
   white-space: nowrap;
 }
 
@@ -38,13 +41,12 @@ html, body {
 .group { display: flex; align-items: center; gap: 2px; }
 
 .grip {
-  width: 10px;
-  height: 22px;
-  padding: 6px 3px;
+  width: 26px;
+  height: 26px;
+  margin: 0 3px 0 6px;
   cursor: grab;
-  background: radial-gradient(circle, var(--muted) 1.2px, transparent 1.5px) 0 0 / 5px 5px;
-  background-origin: content-box;
-  background-clip: content-box;
+  background: url("bubble.png") center / 24px no-repeat;
+  filter: drop-shadow(0 2px 6px rgba(81, 115, 214, 0.45));
 }
 
 .btn {
@@ -61,7 +63,11 @@ html, body {
   cursor: pointer;
 }
 .btn:hover { background: var(--hover); }
-.btn.on { background: var(--tool-on); color: #fff; box-shadow: inset 0 0 0 1px var(--brand); }
+.btn.on {
+  background: linear-gradient(180deg, rgba(106, 139, 240, 0.42), rgba(67, 97, 200, 0.3));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(143, 169, 238, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
 .btn:disabled { opacity: 0.3; cursor: default; background: transparent; }
 .btn svg {
   width: 19px;
@@ -107,7 +113,7 @@ html, body {
   background: var(--raised);
 }
 #mode:hover { background: #1a2945; }
-#mode.on { background: var(--brand); color: #fff; box-shadow: none; }
+#mode.on { background: var(--grad); color: #fff; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22); }
 
 .sep { width: 1px; height: 22px; background: var(--line); margin: 0 5px; }
 
@@ -140,13 +146,13 @@ html, body {
   width: 44px;
   height: 44px;
   box-sizing: border-box;
-  border-radius: 50%;
-  border: 3px solid var(--line);
-  background: var(--bg) url("bubble.png") center / 28px no-repeat;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 0;
+  border: 0;
+  background: transparent url("bubble.png") center / 40px no-repeat;
+  box-shadow: none;
   cursor: pointer;
 }
-#bubble.on { border-color: var(--brand); }
+#bubble.on { filter: brightness(1.08); }
 
 body.mini #pill, body.mini #flyout { display: none !important; }
 body.mini #bubble { display: block; }
@@ -157,7 +163,7 @@ body.vertical #pill,
 body.vertical #flyout,
 body.vertical .group { flex-direction: column; }
 body.vertical #pill { padding: 2px 5px 6px; }
-body.vertical .grip { width: 22px; height: 8px; padding: 3px 6px; }
+body.vertical .grip { margin: 6px 0 3px; }
 body.vertical .sep { width: 22px; height: 1px; margin: 5px 0; }
 body.vertical #mode { width: 34px; }
 body.vertical #mode span { display: none; }
