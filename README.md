@@ -122,6 +122,34 @@ size, `laserSeconds` the trail duration, and `toolbarOrientation` accepts `horiz
 `vertical`. Position is saved on exit. If a hotkey is already taken by another program, Xink skips
 it and the tray menu still works.
 
+## Use with Claude Code and Codex
+
+`Xink.exe --mcp` runs Xink as a local [MCP](https://modelcontextprotocol.io) server, with no window,
+so AI assistants such as Claude Code and Codex can use its engine on this PC. Xink itself sends
+nothing over the network; what the assistant reads goes to its AI provider, as with anything else
+you share with it. It only reads. The drawing lives in the running window, so there is little to
+read from outside.
+
+Claude Code (available in every project):
+
+```bash
+claude mcp add --scope user xink -- "C:\Apps\Xink\Xink.exe" --mcp
+```
+
+Codex, in `%USERPROFILE%\.codex\config.toml`:
+
+```toml
+[mcp_servers.xink]
+command = 'C:\Apps\Xink\Xink.exe'
+args = ["--mcp"]
+```
+
+Use the path where your `Xink.exe` is. Tools:
+
+- `app_info`: version, where the exe and `Data` folder are, and the saved settings.
+- `status`: whether Xink is running, and its hotkeys, pen colors and width, laser fade and toolbar
+  settings.
+
 ## Development
 
 Tauri 2, Rust and plain HTML/CSS/JavaScript. See the [development and release
@@ -149,6 +177,9 @@ continue usando o OBS ou o gravador que já usa.
   branco/preto, C limpar,   Ctrl+Z/Ctrl+Y desfazer/refazer.
 - No OBS use **Captura de Tela**, não Captura de Janela. A barra solicita proteção de captura, mas o
   resultado depende do gravador; teste antes. Os desenhos não são salvos ao fechar o app.
+- **Claude Code e Codex**: `Xink.exe --mcp` roda o Xink como servidor MCP local, sem janela, para
+  assistentes de IA usarem o estado e as configurações (só leitura). Veja [Use with Claude Code and
+  Codex](#use-with-claude-code-and-codex).
 
 ## Español
 
@@ -170,6 +201,9 @@ graba: sigue usando OBS o tu grabador de siempre.
 - En OBS usa **Captura de pantalla**, no Captura de ventana. La barra solicita protección de
   captura; el resultado depende del grabador. Haga una prueba. Los dibujos no se guardan al cerrar
   la app.
+- **Claude Code y Codex**: `Xink.exe --mcp` ejecuta Xink como servidor MCP local, sin ventana, para
+  que asistentes de IA usen el estado y la configuración (solo lectura). Consulta [Use with Claude
+  Code and Codex](#use-with-claude-code-and-codex).
 
 ## Skale Club apps
 
@@ -179,11 +213,10 @@ Portuguese and Spanish UI text. Each app has its own executable and portable Dat
 
 | App | Purpose |
 | --- | --- |
+| [Xpecs](https://github.com/Skale-Club/xpecs) | Care for the PC (cleaning, disk space, drivers, startup, apps) and inspect hardware, live sensors and benchmarks |
 | [Xink](https://github.com/Skale-Club/xink) | Draw over the screen during presentations or recordings |
-| [Xpecs](https://github.com/Skale-Club/xpecs) | Inspect hardware, live sensors and benchmark results |
-| [Xcare](https://github.com/Skale-Club/xcare) | Clean selected files, manage startup programs and explicitly remove stubborn files |
 | [Xnote](https://github.com/Skale-Club/xnote) | Transcribe meetings and turn notes into summaries and tasks |
-| [Xpace](https://github.com/Skale-Club/xpace) | Analyze disk usage with a folder tree, treemap, largest files and file-type totals |
+| [Xvert](https://github.com/Skale-Club/xvert) | Convert videos, music and pictures between formats |
 
 Repository access may be required depending on project visibility. Report problems through the
 relevant repository, including app version, Windows version and reproduction steps. Remove

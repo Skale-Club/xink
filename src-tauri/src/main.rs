@@ -7,6 +7,8 @@
 //   above it) and, by default, hidden from screen capture.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod mcp;
+mod mcp_tools;
 mod portable;
 mod updater;
 
@@ -517,6 +519,9 @@ fn main() {
     updater::finish_previous();
     portable::migrate(&["xink.json"]);
     portable::sync_appinfo();
+    if mcp::requested() {
+        return mcp_tools::serve();
+    }
     let config = load_config();
     tauri::Builder::default()
         // Opening Xink again just brings the toolbar back.
