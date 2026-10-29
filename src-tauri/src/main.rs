@@ -70,7 +70,14 @@ struct Labels {
     settings: &'static str,
     quit: &'static str,
     tooltip: &'static str,
-    update: &'static str,
+    updates: &'static str,
+    check: &'static str,
+    checking: &'static str,
+    up_to_date: &'static str,
+    downloading: &'static str,
+    ready: &'static str,
+    failed: &'static str,
+    restart: &'static str,
 }
 
 fn labels(language: &str) -> Labels {
@@ -83,7 +90,14 @@ fn labels(language: &str) -> Labels {
             settings: "Configurações (xink.json)",
             quit: "Sair do Xink",
             tooltip: "Xink, da Skale Club: clique para mostrar ou esconder a barra",
-            update: "Atualizar para a versão",
+            updates: "Atualizações",
+            check: "Procurar atualizações agora",
+            checking: "procurando atualizações…",
+            up_to_date: "versão mais recente",
+            downloading: "Baixando a versão",
+            ready: "pronta: é instalada quando você sai do Xink",
+            failed: "Não foi possível procurar atualizações",
+            restart: "Reiniciar e instalar a versão",
         },
         "es" => Labels {
             draw: "Dibujar / ratón",
@@ -93,7 +107,14 @@ fn labels(language: &str) -> Labels {
             settings: "Configuración (xink.json)",
             quit: "Salir de Xink",
             tooltip: "Xink, de Skale Club: haz clic para mostrar u ocultar la barra",
-            update: "Actualizar a la versión",
+            updates: "Actualizaciones",
+            check: "Buscar actualizaciones ahora",
+            checking: "buscando actualizaciones…",
+            up_to_date: "versión más reciente",
+            downloading: "Descargando la versión",
+            ready: "lista: se instala cuando sales de Xink",
+            failed: "No se pudo buscar actualizaciones",
+            restart: "Reiniciar e instalar la versión",
         },
         _ => Labels {
             draw: "Draw / mouse",
@@ -103,7 +124,14 @@ fn labels(language: &str) -> Labels {
             settings: "Settings (xink.json)",
             quit: "Quit Xink",
             tooltip: "Xink by Skale Club: click to show or hide the toolbar",
-            update: "Update to version",
+            updates: "Updates",
+            check: "Check for updates now",
+            checking: "checking for updates…",
+            up_to_date: "latest version",
+            downloading: "Downloading version",
+            ready: "ready: installs when you quit Xink",
+            failed: "Could not check for updates",
+            restart: "Restart and install version",
         },
     }
 }
@@ -114,8 +142,6 @@ struct AppState {
     /// Name of the monitor the overlay currently covers.
     monitor: Mutex<String>,
     toolbar_placed: Mutex<bool>,
-    /// A newer release found on GitHub; offered in the tray menu.
-    update: Mutex<Option<updater::Update>>,
 }
 
 fn config_path() -> PathBuf {
@@ -234,42 +260,47 @@ fn set_language(app: &AppHandle, language: &str) {
     let _ = app.emit("language", language);
 }
 
-/// Rebuilds the tray menu and tooltip (language changed, update found).
+/// Rebuilds the tray menu and tooltip (language changed, update status changed).
 fn refresh_tray(app: &AppHandle, config: &Config) {
     let Some(tray) = app.tray_by_id("xink") else { return };
     if let Ok(menu) = build_menu(app, config) {
         let _ = tray.set_menu(Some(menu));
     }
-    let _ = tray.set_tooltip(Some(tooltip(app, config)));
+    let _ = tray.set_tooltip(Some(tooltip(config)));
 }
 
-fn tooltip(app: &AppHandle, config: &Config) -> String {
+fn tooltip(config: &Config) -> String {
     let t = labels(&config.language);
-    match &*app.state::<AppState>().update.lock().unwrap() {
-        Some(update) => format!("{}\n{} {}", t.tooltip, t.update, update.version),
+    match ready_version() {
+        Some(version) => format!("{}\n{version} {}", t.tooltip, t.ready),
         None => t.tooltip.to_string(),
     }
 }
 
-/// Checks GitHub once at startup; a newer version shows up in the tray menu.
-fn check_update(app: AppHandle) {
-    std::thread::spawn(move || {
-        let Ok(Some(update)) = updater::check() else { return };
-        *app.state::<AppState>().update.lock().unwrap() = Some(update);
-        let config = app.state::<AppState>().config.lock().unwrap().clone();
-        refresh_tray(&app, &config);
-    });
+/// The downloaded update waiting to be installed, if any.
+fn ready_version() -> Option<String> {
+    let status = updater::status();
+    status.version.filter(|_| status.state == updater::State::Ready)
 }
 
-/// Downloads, verifies and swaps the exe, then exits so the new copy runs.
-fn install_update(app: &AppHandle) {
-    let Some(update) = app.state::<AppState>().update.lock().unwrap().clone() else { return };
-    let app = app.clone();
-    std::thread::spawn(move || {
-        if updater::install(&update).is_ok() {
-            app.exit(0);
-        }
-    });
+/// The first line of the tray's Updates submenu.
+fn update_line(t: &Labels) -> String {
+    let status = updater::status();
+    let version = status.version.clone().unwrap_or_default();
+    match status.state {
+        updater::State::Idle | updater::State::Checking => format!("v{} · {}", status.current, t.checking),
+        updater::State::UpToDate => format!("v{} · {}", status.current, t.up_to_date),
+        updater::State::Downloading => format!("{} {version}…", t.downloading),
+        updater::State::Ready => format!("{version} {}", t.ready),
+        updater::State::Failed => t.failed.to_string(),
+    }
+}
+
+/// Installs the downloaded update now and exits so the new copy runs.
+fn restart_to_update(app: &AppHandle) {
+    if updater::restart().is_ok() {
+        app.exit(0);
+    }
 }
 
 #[tauri::command]
@@ -451,9 +482,11 @@ fn build_menu(app: &AppHandle, config: &Config) -> tauri::Result<Menu<tauri::Wry
         choices.iter().map(|c| c as &dyn tauri::menu::IsMenuItem<tauri::Wry>).collect();
     let language = Submenu::with_id_and_items(app, "language", t.language, true, &choice_refs)?;
 
-    let pending = app.state::<AppState>().update.lock().unwrap().as_ref().map(|u| u.version.clone());
-    let update = match pending {
-        Some(version) => Some(item("update", format!("{} {version}", t.update))?),
+    let status = MenuItem::with_id(app, "update:status", update_line(&t), false, None::<&str>)?;
+    let check = item("update:check", t.check.into())?;
+    let updates = Submenu::with_id_and_items(app, "updates", t.updates, true, &[&status, &check])?;
+    let update = match ready_version() {
+        Some(version) => Some(item("update:restart", format!("{} {version}", t.restart))?),
         None => None,
     };
     let update_separator = PredefinedMenuItem::separator(app)?;
@@ -468,6 +501,7 @@ fn build_menu(app: &AppHandle, config: &Config) -> tauri::Result<Menu<tauri::Wry
         &clear,
         &separator,
         &language,
+        &updates,
         &settings,
         &site,
         &quit,
@@ -477,7 +511,7 @@ fn build_menu(app: &AppHandle, config: &Config) -> tauri::Result<Menu<tauri::Wry
 
 fn create_tray(app: &AppHandle, config: &Config) -> tauri::Result<()> {
     let mut tray = TrayIconBuilder::with_id("xink")
-        .tooltip(tooltip(app, config))
+        .tooltip(tooltip(config))
         .menu(&build_menu(app, config)?)
         .show_menu_on_left_click(false)
         .on_menu_event(|app, event| match event.id.as_ref() {
@@ -488,7 +522,8 @@ fn create_tray(app: &AppHandle, config: &Config) -> tauri::Result<()> {
             }
             "settings" => open_config(),
             "site" => open_site(),
-            "update" => install_update(app),
+            "update:restart" => restart_to_update(app),
+            "update:check" => updater::check_now(),
             "quit" => app.exit(0),
             id => {
                 if let Some(language) = id.strip_prefix("lang:") {
@@ -535,7 +570,6 @@ fn main() {
             drawing: Mutex::new(false),
             monitor: Mutex::new(String::new()),
             toolbar_placed: Mutex::new(false),
-            update: Mutex::new(None),
         })
         .invoke_handler(tauri::generate_handler![
             get_config,
@@ -559,7 +593,10 @@ fn main() {
             create_windows(&handle, &config)?;
             register_shortcuts(&handle, &config)?;
             create_tray(&handle, &config)?;
-            check_update(handle);
+            updater::start(move |_| {
+                let config = handle.state::<AppState>().config.lock().unwrap().clone();
+                refresh_tray(&handle, &config);
+            });
             Ok(())
         })
         .build(tauri::generate_context!())
@@ -567,6 +604,10 @@ fn main() {
         .run(|app, event| {
             if let RunEvent::ExitRequested { .. } = event {
                 save_config(&app.state::<AppState>().config.lock().unwrap());
+            }
+            // A downloaded update replaces the exe once Xink quits.
+            if let RunEvent::Exit = event {
+                updater::apply();
             }
         });
 }

@@ -15,9 +15,10 @@ publicly downloadable executable has been published. Build from source using the
 [development guide](docs/DEVELOPMENT.md). Future release binaries belong in
 [Releases](https://github.com/Skale-Club/xink/releases).
 
-The app can offer signed updates when a newer release contains both an executable and its signature.
-Updates require internet access and are installed when you select the update action; your `Data`
-folder is retained.
+Once running, Xink updates itself: it checks GitHub Releases when it starts and every 6 hours,
+downloads a newer signed version in the background and installs it when you quit Xink. **Updates**
+in the tray menu shows where it stands, with **Check for updates now** and, once a version is ready,
+**Restart and install version**. Your `Data` folder is kept.
 
 ## Run it
 
@@ -162,8 +163,8 @@ A push to `main` alone does not publish an executable.
 
 **Disponibilidade:** em 27/10/2026, ainda não há release nem executável publicado. Consulte
 [Releases](https://github.com/Skale-Club/xink/releases) ou as [instruções de
-compilação](docs/DEVELOPMENT.md). As atualizações dependem de uma release assinada e da ação do
-usuário.
+compilação](docs/DEVELOPMENT.md). Depois de aberto, o app se atualiza sozinho a cada nova
+release assinada.
 
 Xink é para escrever na tela por cima de qualquer programa, feito para gravar vídeo. Ele não grava:
 continue usando o OBS ou o gravador que já usa.
@@ -185,8 +186,8 @@ continue usando o OBS ou o gravador que já usa.
 
 **Disponibilidad:** al 27/10/2026, aún no hay release ni ejecutable publicado. Consulte
 [Releases](https://github.com/Skale-Club/xink/releases) o las [instrucciones de
-compilación](docs/DEVELOPMENT.md). Las actualizaciones requieren una release firmada y la acción del
-usuario.
+compilación](docs/DEVELOPMENT.md). Una vez abierta, la app se actualiza sola con cada nueva
+release firmada.
 
 Xink sirve para escribir en la pantalla encima de cualquier programa, pensado para grabar videos. No
 graba: sigue usando OBS o tu grabador de siempre.
