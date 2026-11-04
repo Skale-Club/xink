@@ -10,10 +10,8 @@ Made by **[Skale Club](https://skale.club)**.
 
 ## Availability
 
-**Status checked October 27, 2026:** source version 0.1.1. No GitHub Release or
-publicly downloadable executable has been published. Build from source using the
-[development guide](docs/DEVELOPMENT.md). Future release binaries belong in
-[Releases](https://github.com/Skale-Club/xink/releases).
+Signed portable builds are distributed through [Releases](https://github.com/Skale-Club/xink/releases).
+See [internal update details](docs/INTERNAL_UPDATES.md) for the update endpoint and release process.
 
 Once running, Xink updates itself: it checks GitHub Releases when it starts and every 6 hours,
 downloads a newer signed version in the background and installs it when you quit Xink. **Updates**
@@ -161,10 +159,7 @@ A push to `main` alone does not publish an executable.
 
 ## Português
 
-**Disponibilidade:** em 27/10/2026, ainda não há release nem executável publicado. Consulte
-[Releases](https://github.com/Skale-Club/xink/releases) ou as [instruções de
-compilação](docs/DEVELOPMENT.md). Depois de aberto, o app se atualiza sozinho a cada nova
-release assinada.
+**Disponibilidade:** versões portáteis assinadas em [Releases](https://github.com/Skale-Club/xink/releases). As atualizações são baixadas e aplicadas pelo próprio app.
 
 Xink é para escrever na tela por cima de qualquer programa, feito para gravar vídeo. Ele não grava:
 continue usando o OBS ou o gravador que já usa.
@@ -184,10 +179,7 @@ continue usando o OBS ou o gravador que já usa.
 
 ## Español
 
-**Disponibilidad:** al 27/10/2026, aún no hay release ni ejecutable publicado. Consulte
-[Releases](https://github.com/Skale-Club/xink/releases) o las [instrucciones de
-compilación](docs/DEVELOPMENT.md). Una vez abierta, la app se actualiza sola con cada nueva
-release firmada.
+**Disponibilidad:** versiones portátiles firmadas en [Releases](https://github.com/Skale-Club/xink/releases). La propia app descarga y aplica las actualizaciones.
 
 Xink sirve para escribir en la pantalla encima de cualquier programa, pensado para grabar videos. No
 graba: sigue usando OBS o tu grabador de siempre.

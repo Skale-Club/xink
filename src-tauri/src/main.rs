@@ -549,6 +549,7 @@ fn create_tray(app: &AppHandle, config: &Config) -> tauri::Result<()> {
 }
 
 fn main() {
+    if updater::verify_cli() { return; }
     // Before the single-instance check, so a just-updated copy doesn't see the
     // old one still running and quit.
     updater::finish_previous();
