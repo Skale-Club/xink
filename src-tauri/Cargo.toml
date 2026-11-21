@@ -1,6 +1,6 @@
 [package]
 name = "xink"
-version = "0.2.0"
+version = "0.3.0"
 description = "Xink: escreva na tela por cima de qualquer programa"
 edition = "2021"
 

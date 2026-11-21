@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-11-20
 
 - Move the toolbar to the Skale Club family design (skale.css v2) with Xink's highlighter-yellow
   signal: family navy surfaces, active tools and drawing mode filled with the signal in dark ink,
