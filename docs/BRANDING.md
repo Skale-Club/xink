@@ -1,17 +1,22 @@
 # Xink branding
 
-Xink belongs to the Skale Club sibling app family: freestanding icy-white/cobalt-blue symbols on transparent backgrounds, with shared lighting and visual weight. Product icons have no navy tile or decorative outer blue rim.
+Xink is the screen-annotation toolbar in the Skale Club Windows app family (skale.css v2). Its
+signal is highlighter yellow `#f2e35b` and its mark is a pen nib, in ink `#04070d` on a rounded
+yellow tile. Text and icons on the signal (active tools, drawing mode) are dark ink.
 
-- Xink: fountain-pen nib and ink stroke.
-- Xpecs: processor and telemetry pulse.
-- Xcare: maintenance brush and cleaning sweep.
-- Xnote: note page and audio waveform.
+The source of truth is `skaleclub-apps/design/skale-css/marks/xink.svg`; the family rules are in
+that folder's `README.md`. Never redraw the mark by hand here. `toolbar.css` sets the v2 values
+itself instead of importing `skale.css`, because the toolbar is a floating pill, not a window.
 
-The raster master is `icon-source.png` (1254 x 1254 RGBA, transparent outside the product symbol). It was generated with the built-in image generation tool on October 26, 2026. The original product artwork was edited with image_gen to remove the tile and outer rim while retaining the symbol identity. It is not a vector source.
+Run `./make-icon.ps1` to regenerate the Tauri PNG/ICO assets and `src/bubble.png` (the grip and the
+minimized bubble). It dot-sources the shared `render-mark.ps1` from `skaleclub-apps` (no npm): the
+glyph fills 64% of the tile on desktop sizes and 74% at 24 px and below. `icon.icns`, `android/`
+and `ios/` are not used by the Windows build and still hold the previous symbol. The organization
+mark `src/skaleclub.png` is separate and unchanged.
 
-Run `npm ci` when dependencies are missing, then `./make-icon.ps1` to regenerate the Tauri PNG/ICO assets and `src/bubble.png`. The script checks the conversion command's exit code. Keep the master, generated assets and in-app mark in sync. Changes to executable icons appear in newly built binaries; Windows may retain cached icons for existing shortcuts.
-
-The organization mark `src/skaleclub.png` is separate from the product icon and remains unchanged. App behavior is unchanged by this asset update. Regeneration must preserve transparency and small-size legibility.
+The tray still shows the window icon (the tiled mark). The family rule for tray icons is the glyph
+alone in white with details cut out; that needs a Rust change (`create_tray` in `main.rs`) and a
+build to verify.
 
 ## Embedded Windows icon verification
 
@@ -28,9 +33,7 @@ workflow uses this same npm build command, so it receives the verification too.
 Do not diagnose an old Explorer icon as a Windows cache issue until this check
 passes. An Explorer thumbnail is not evidence that the executable resources match.
 
-## Transparent product symbols
+## History
 
-The current direction is symbol-only: no navy square, surrounding frame or blue
-decorative border. Blue bevels that belong to the object remain. Preserve the RGBA
-alpha when exporting Windows PNG/ICO and PortableApps AppInfo artwork. Review the
-symbols on both light and dark surfaces and at 16/24/32 px. Xpace joins the family with a folder/treemap symbol.
+- 2026-11-20: the family mark replaced the earlier transparent nib-and-ink-stroke symbol at the
+  owner's request, as part of the skale.css v2 rollout.
