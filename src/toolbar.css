@@ -1,18 +1,23 @@
-/* Skale Club palette: navy surfaces, CTA blue #5173D6, soft blue #8FA9EE.
-   Same values as skale.css in the windowed Skale Club apps. */
+/* Skale Club family values (skale.css v2) with Xink's highlighter signal #f2e35b.
+   The toolbar is a floating pill, so it sets the v2 values here instead of importing
+   skale.css (which owns a full-window layout). Text on the signal is dark ink. */
 :root {
   color-scheme: dark;
-  --bg: rgba(12, 20, 36, 0.96);
-  --raised: #142038;
-  --fg: #e9eef9;
-  --muted: #8692ab;
+  --bg: rgba(7, 11, 20, 0.96);
+  --raised: #17223b;
+  --raised-hover: #1d2a48;
+  --fg: #eef2fb;
+  --muted: #8b97b1;
   --hover: rgba(143, 169, 238, 0.13);
-  --line: rgba(143, 169, 238, 0.18);
-  --brand: #5173D6;
-  --brand-soft: #8FA9EE;
-  --tool-on: rgba(81, 115, 214, 0.32);
-  --grad: linear-gradient(135deg, #6a8bf0 0%, #5173d6 48%, #4361c8 100%);
-  --surface: linear-gradient(180deg, rgba(24, 36, 64, 0.97), rgba(10, 16, 30, 0.97));
+  --line: rgba(143, 169, 238, 0.24);
+  --signal: #f2e35b;
+  --on-brand: #04070d;
+  --brand: var(--signal);
+  --brand-soft: color-mix(in srgb, var(--signal) 60%, white);
+  --brand-glow: color-mix(in srgb, var(--signal) 45%, transparent);
+  --grad: linear-gradient(135deg, color-mix(in srgb, var(--signal) 80%, white) 0%, var(--signal) 48%, color-mix(in srgb, var(--signal) 85%, black) 100%);
+  --surface: linear-gradient(180deg, rgba(23, 34, 59, 0.97), rgba(7, 11, 20, 0.97));
+  --font-mono: "Cascadia Mono", "Cascadia Code", Consolas, monospace;
 }
 
 html, body {
@@ -46,7 +51,7 @@ html, body {
   margin: 0 3px 0 6px;
   cursor: grab;
   background: url("bubble.png") center / 24px no-repeat;
-  filter: drop-shadow(0 2px 6px rgba(81, 115, 214, 0.45));
+  filter: drop-shadow(0 2px 6px var(--brand-glow));
 }
 
 .btn {
@@ -63,10 +68,11 @@ html, body {
   cursor: pointer;
 }
 .btn:hover { background: var(--hover); }
+.btn:focus-visible { outline: 2px solid var(--brand-soft); outline-offset: 1px; }
 .btn.on {
-  background: linear-gradient(180deg, rgba(106, 139, 240, 0.42), rgba(67, 97, 200, 0.3));
-  color: #fff;
-  box-shadow: inset 0 0 0 1px rgba(143, 169, 238, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: var(--grad);
+  color: var(--on-brand);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 12px -6px var(--brand-glow);
 }
 .btn:disabled { opacity: 0.3; cursor: default; background: transparent; }
 .btn svg {
@@ -85,11 +91,11 @@ html, body {
   position: absolute;
   right: 3px;
   bottom: 2px;
-  font: 600 8px/1 "Segoe UI", sans-serif;
+  font: 700 8px/1 var(--font-mono);
   color: var(--muted);
   pointer-events: none;
 }
-.btn.on .key { color: var(--brand-soft); }
+.btn.on .key { color: color-mix(in srgb, var(--on-brand) 65%, transparent); }
 
 /* Small corner triangle: this button opens more options. */
 .btn.more::after {
@@ -112,8 +118,8 @@ html, body {
   font-weight: 600;
   background: var(--raised);
 }
-#mode:hover { background: #1a2945; }
-#mode.on { background: var(--grad); color: #fff; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22); }
+#mode:hover { background: var(--raised-hover); }
+#mode.on { background: var(--grad); color: var(--on-brand); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3); }
 
 .sep { width: 1px; height: 22px; background: var(--line); margin: 0 5px; }
 
@@ -136,7 +142,7 @@ html, body {
 }
 
 .board-white svg { fill: #fff; }
-.board-black svg { fill: #000; stroke: #8b96b0; }
+.board-black svg { fill: #000; stroke: var(--muted); }
 
 #bubble {
   display: none;
